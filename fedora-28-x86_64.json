@@ -1,0 +1,36 @@
+{
+  "builders": [{
+    "type": "qemu",
+    "iso_url": "{{user `mirror`}}/releases/28/Server/x86_64/iso/Fedora-Server-netinst-x86_64-28-1.1.iso",
+    "iso_checksum_url": "{{user `mirror`}}/releases/28/Server/x86_64/iso/Fedora-Server-28-1.1-x86_64-CHECKSUM",
+    "iso_checksum_type": "sha256",
+    "output_directory": "output-fedora-28-x86_64-{{build_type}}",
+    "vm_name": "fedora-28-x86_64",
+    "disk_size": "{{user `disk_size`}}",
+    "headless": "{{user `headless`}}",
+    "http_directory": "http",
+    "boot_wait": "5s",
+    "boot_command": [
+      "<tab> ",
+      "inst.ks=http://{{.HTTPIP}}:{{.HTTPPort}}/fedora-28/anaconda-ks.cfg ",
+      "biosdevname=0 ",
+      "net.ifnames=0 ",
+      "<enter>"
+    ],
+    "ssh_timeout": "60m",
+    "ssh_username": "fedora",
+    "ssh_password": "fedora",
+    "shutdown_command": "sudo systemctl poweroff",
+    "qemuargs": [
+      ["-m", "{{user `memory`}}"],
+      ["-smp", "{{user `cpus`}}"]
+    ]
+  }],
+  "variables": {
+    "headless": "false",
+    "cpus": "1",
+    "disk_size": "20000",
+    "memory": "1024",
+    "mirror": "http://download.fedoraproject.org/pub/fedora/linux"
+  }
+}

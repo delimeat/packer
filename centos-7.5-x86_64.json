@@ -1,0 +1,35 @@
+{
+  "builders": [{
+    "type": "qemu",
+    "iso_url": "{{user `mirror`}}/7/isos/x86_64/CentOS-7-x86_64-NetInstall-1804.iso",
+    "iso_checksum_url": "{{user `mirror`}}/7/isos/x86_64/sha256sum.txt",
+    "iso_checksum_type": "sha256",
+    "output_directory": "output-centos-7.5-x86_64-{{build_type}}",
+    "vm_name": "centos-7.5-x86_64",
+    "disk_size": "{{user `disk_size`}}",
+    "headless": "{{user `headless`}}",
+    "http_directory": "http",
+    "boot_wait": "5s",
+    "boot_command": [
+      "<esc>",
+      "<wait>",
+      "linux inst.ks=http://{{.HTTPIP}}:{{.HTTPPort}}/centos-7.5/anaconda-ks.cfg biosdevname=0 net.ifnames=0",
+      "<enter>"
+    ],
+    "ssh_timeout": "60m",
+    "ssh_username": "centos",
+    "ssh_password": "centos",
+    "shutdown_command": "sudo systemctl poweroff",
+    "qemuargs": [
+      ["-m", "{{user `memory`}}"],
+      ["-smp", "{{user `cpus`}}"]
+    ]
+  }],
+  "variables": {
+    "headless": "false",
+    "cpus": "1",
+    "disk_size": "20000",
+    "memory": "1024",
+    "mirror": "http://mirrors.kernel.org/centos"
+  }
+}
